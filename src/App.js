@@ -1,51 +1,42 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-import Cell from './Cell';
+import Cell from './Cell'
 
-// @connect()
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
-    handleClick(e) {
-        switch (e.type) {
-            case 'contextmenu':
-                e.preventDefault();
-                // e.target.isFlagged = !e.target.isFlagged;
-                break;
-            case 'click':
-            // e.target.isOpen = true;
-            default:
-        }
-        console.log('click', e.type);
-    }
     render() {
-        const { board } = this.props;
+        const { board, cells, toggleFlag, open } = this.props
         return (
             <div
                 className="App"
                 style={{
                     display: 'flex',
                     flexFlow: 'row wrap',
-                    width: board.length * 20
+                    // width: ROWS * 20
+                    width: 480
                 }}
             >
-                {board.map(row => {
-                    return row.map(cell =>
-                        <Cell
-                            onContextMenu={this.handleClick}
-                            onClick={this.handleClick}
-                            {...cell}
-                        />
-                    );
-                })}
+                {board.map(id =>
+                    <Cell key={id} onRightClick={toggleFlag} onClick={open} {...cells[id]} />
+                )}
             </div>
-        );
+        )
     }
 }
 
-export default connect(state => {
-    return { board: state.board };
-})(App);
+const mapStateToProps = state => {
+    return { ...state }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        toggleFlag: id => {
+            dispatch({ type: 'CELL_TOGGLE_FLAG', id })
+        },
+        open: id => {
+            dispatch({ type: 'CELL_OPEN', id })
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)

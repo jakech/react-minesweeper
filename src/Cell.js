@@ -1,6 +1,8 @@
 import React from 'react';
 
-export default ({ hasMine, value, isOpen, onClick, onContextMenu }) => {
+export default ({ id, hasMine, isFlagged, value, isOpen, onClick, onRightClick }) => {
+    const flag = '\uD83D\uDEA9';
+    const bomb = '\uD83D\uDCA3'
     return (
         <div
             style={{
@@ -8,15 +10,19 @@ export default ({ hasMine, value, isOpen, onClick, onContextMenu }) => {
                 width: 20,
                 height: 20,
                 lineHeight: '20px',
-                background: isOpen ? 'grey' : 'silver',
+                background: isOpen ? 'lightgray' : 'darkgray',
                 textAlign: 'center',
                 border: '1px white solid',
                 boxSizing: 'border-box'
             }}
-            onClick={onClick}
-            onContextMenu={onContextMenu}
+            onClick={() => onClick(id)}
+            onContextMenu={e => {
+                e.preventDefault();
+                onRightClick(id);
+            }}
         >
-            {isOpen && (hasMine ? '\uD83D\uDCA3' : !!value && value)}
+            {isFlagged && flag}
+            {isOpen && (hasMine ? bomb : !!value && value)}
         </div>
     );
 };
