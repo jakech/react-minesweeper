@@ -31,6 +31,46 @@ function createBoard() {
         if (!cell.hasMine) {
             cell.hasMine = true;
             mineRemain--;
+
+            // set value
+            //  nw | n | ne
+            // -------------
+            //  w  | c | e
+            // -------------
+            //  sw | s | se
+
+            if (row - 1 >= 0 && col - 1 >= 0) {
+                // nw
+                board[row - 1][col - 1].value++;
+            }
+            if (row - 1 >= 0) {
+                // north
+                board[row - 1][col].value++;
+            }
+            if (row - 1 >= 0 && col + 1 < board[row].length) {
+                // ne
+                board[row - 1][col + 1].value++;
+            }
+            if (col - 1 > 0) {
+                // w
+                board[row][col - 1].value++;
+            }
+            if (col + 1 < board[row].length) {
+                // east
+                board[row][col + 1].value++;
+            }
+            if (row + 1 < board.length && col - 1 > 0) {
+                // sw
+                board[row + 1][col - 1].value++;
+            }
+            if (row + 1 < board.length) {
+                // s
+                board[row + 1][col].value++;
+            }
+            if (row + 1 < board.length && col + 1 < board[row].length) {
+                // se
+                board[row + 1][col + 1].value++;
+            }
         }
     }
 
@@ -42,7 +82,7 @@ function createCell() {
         hasMine: false,
         isOpen: false,
         isFlagged: false,
-        value: null
+        value: 0
     };
 }
 
@@ -52,6 +92,19 @@ class App extends Component {
         this.state = {
             board: createBoard()
         };
+        this.handleClick = this.handleClick.bind(this);
+    }
+    handleClick(e) {
+        switch (e.type) {
+            case 'contextmenu':
+                e.preventDefault();
+                // e.target.isFlagged = !e.target.isFlagged;
+                break;
+            case 'click':
+                // e.target.isOpen = true;
+            default:
+        }
+        console.log('click', e.type);
     }
     render() {
         return (
@@ -64,7 +117,13 @@ class App extends Component {
                 }}
             >
                 {this.state.board.map(row => {
-                    return row.map(cell => <Cell {...cell} />);
+                    return row.map(cell =>
+                        <Cell
+                            onContextMenu={this.handleClick}
+                            onClick={this.handleClick}
+                            {...cell}
+                        />
+                    );
                 })}
             </div>
         );
