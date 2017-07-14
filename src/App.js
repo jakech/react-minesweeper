@@ -1,12 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { toggleCellFlag, openCell } from './actions'
+import { tryToggleCellFlag, tryOpenCell, endGame } from './actions'
 
 import Cell from './Cell'
 
 class App extends Component {
     render() {
-        const { boardWidth, board, cells, toggleFlag, open } = this.props
+        const {
+            gameOver,
+            boardWidth,
+            board,
+            cells,
+            tryToggleFlag,
+            tryOpen,
+            endGame
+        } = this.props
         return (
             <div
                 className="App"
@@ -19,8 +27,9 @@ class App extends Component {
                 {board.map(id =>
                     <Cell
                         key={id}
-                        onRightClick={toggleFlag}
-                        onClick={open}
+                        onRightClick={tryToggleFlag}
+                        onClick={tryOpen}
+                        onHitMine={endGame}
                         {...cells[id]}
                     />
                 )}
@@ -31,10 +40,16 @@ class App extends Component {
 
 const mapStateToProps = state => {
     const { allIds, byId } = state.board
-    return { board: allIds, cells: byId, boardWidth: state.options.rows * 20 }
+    return {
+        board: allIds,
+        cells: byId,
+        boardWidth: state.game.rows * 20, // 20 is the cell width
+        gameOver: state.game.gameOver
+    }
 }
 
 export default connect(mapStateToProps, {
-    toggleFlag: toggleCellFlag,
-    open: openCell
+    tryToggleFlag: tryToggleCellFlag,
+    tryOpen: tryOpenCell,
+    endGame
 })(App)

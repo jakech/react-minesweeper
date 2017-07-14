@@ -7,6 +7,7 @@ export default ({
     value,
     isOpen,
     onClick,
+    onHitMine,
     onRightClick
 }) => {
     const flag = '\uD83D\uDEA9'
@@ -23,7 +24,14 @@ export default ({
                 border: '1px white solid',
                 boxSizing: 'border-box'
             }}
-            onClick={() => onClick(id)}
+            onClick={() => {
+                if (isOpen) return
+
+                onClick(id)
+                if (hasMine) {
+                    onHitMine()
+                }
+            }}
             onContextMenu={e => {
                 e.preventDefault()
                 onRightClick(id)

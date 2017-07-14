@@ -1,6 +1,6 @@
 const SEP = 'x'
 
-export const createBoard = (options) => {
+export const createBoard = options => {
     const newBoard = generateBoard(options.rows, options.cols)
     return {
         allIds: newBoard,
@@ -8,11 +8,10 @@ export const createBoard = (options) => {
     }
 }
 
-export const loadGame = (options) => ({
-    options,
+export const loadGame = options => ({
+    game: options,
     board: createBoard(options)
 })
-
 
 function getRandomInt(min, max) {
     min = Math.ceil(min)
