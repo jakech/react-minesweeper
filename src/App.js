@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { tryToggleCellFlag, tryOpenCell, endGame } from './actions'
+import { toggleCellFlag, openCell, endGame } from './actions'
 
 import Cell from './Cell'
+import Tile from './components/Tile'
 
 class App extends Component {
     render() {
@@ -11,8 +12,8 @@ class App extends Component {
             boardWidth,
             board,
             cells,
-            tryToggleFlag,
-            tryOpen,
+            toggleFlag,
+            open,
             endGame
         } = this.props
         return (
@@ -21,18 +22,25 @@ class App extends Component {
                 style={{
                     display: 'flex',
                     flexFlow: 'row wrap',
-                    width: boardWidth,
-                    border: gameOver ? '1px solid red' : 'none'
+                    width: boardWidth
                 }}
             >
-                {board.map(id =>
-                    <Cell
-                        key={id}
-                        onRightClick={tryToggleFlag}
-                        onClick={tryOpen}
-                        onHitMine={endGame}
-                        {...cells[id]}
-                    />
+                {board.map(
+                    id =>
+                        gameOver
+                            ? <Tile
+                                  key={id}
+                                  {...cells[id]}
+                                  disabled={true}
+                                  isOpen={cells[id].isOpen || cells[id].hasMine}
+                              />
+                            : <Cell
+                                  key={id}
+                                  onRightClick={toggleFlag}
+                                  onClick={open}
+                                  onHitMine={endGame}
+                                  cell={cells[id]}
+                              />
                 )}
             </div>
         )
@@ -50,7 +58,7 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, {
-    tryToggleFlag: tryToggleCellFlag,
-    tryOpen: tryOpenCell,
+    toggleFlag: toggleCellFlag,
+    open: openCell,
     endGame
 })(App)

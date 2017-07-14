@@ -1,4 +1,4 @@
-const toggleCellFlag = id => {
+export const toggleCellFlag = id => {
     return {
         type: 'CELL_TOGGLE_FLAG',
         id
@@ -12,17 +12,17 @@ export const openCell = id => {
     }
 }
 
-export const tryToggleCellFlag = id => (dispatch, getState) => {
-    const { game } = getState()
-    if (game.gameOver) return
-    dispatch(toggleCellFlag(id))
-}
+// export const tryToggleCellFlag = id => (dispatch, getState) => {
+//     const { game } = getState()
+//     if (game.gameOver) return
+//     dispatch(toggleCellFlag(id))
+// }
 
-export const tryOpenCell = id => (dispatch, getState) => {
-    const { game } = getState()
-    if (game.gameOver) return
-    dispatch(openCell(id))
-}
+// export const tryOpenCell = id => (dispatch, getState) => {
+//     const { game } = getState()
+//     if (game.gameOver) return
+//     dispatch(openCell(id))
+// }
 
 export const endGame = () => (dispatch, getState) => {
     const { game } = getState()

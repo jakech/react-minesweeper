@@ -1,45 +1,35 @@
-import React from 'react'
+import React, { Component } from 'react'
+import Tile from './components/Tile'
 
-export default ({
-    id,
-    hasMine,
-    isFlagged,
-    value,
-    isOpen,
-    onClick,
-    onHitMine,
-    onRightClick
-}) => {
-    const flag = '\uD83D\uDEA9'
-    const bomb = '\uD83D\uDCA3'
-    return (
-        <button
-            style={{
-                flex: '1 1 auto',
-                width: 20,
-                height: 20,
-                lineHeight: '20px',
-                background: isOpen ? 'lightgray' : 'darkgray',
-                textAlign: 'center',
-                border: '1px white solid',
-                boxSizing: 'border-box',
-                padding: 0,
-                margin: 0
-            }}
-            disabled={isOpen}
-            onClick={() => {
-                onClick(id)
-                if (hasMine) {
-                    onHitMine()
-                }
-            }}
-            onContextMenu={e => {
-                e.preventDefault()
-                onRightClick(id)
-            }}
-        >
-            {isFlagged && flag}
-            {isOpen && (hasMine ? bomb : !!value && value)}
-        </button>
-    )
+export default class Cell extends Component {
+    constructor(props) {
+        super(props)
+        this.handleClick = this.handleClick.bind(this)
+        this.handleRightClick = this.handleRightClick.bind(this)
+    }
+    handleClick() {
+        const { cell, onClick, onHitMine } = this.props
+        if (cell.isFlagged) return
+        if (cell.hasMine) {
+            onHitMine()
+        } else {
+            onClick(cell.id)
+        }
+    }
+    handleRightClick(e) {
+        const { cell, onRightClick } = this.props
+        e.preventDefault()
+        onRightClick(cell.id)
+    }
+    render() {
+        const { cell } = this.props
+        return (
+            <Tile
+                {...cell}
+                disabled={cell.isOpen}
+                onClick={this.handleClick}
+                onRightClick={this.handleRightClick}
+            />
+        )
+    }
 }
