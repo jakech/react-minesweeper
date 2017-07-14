@@ -14,9 +14,9 @@ import { loadGame } from './gameCreator'
 import registerServiceWorker from './registerServiceWorker'
 
 const boardOptions = {
-    mines: 99,
-    rows: 24,
-    cols: 24
+    mines: 5,
+    rows: 10,
+    cols: 10
 }
 
 const store = createStore(

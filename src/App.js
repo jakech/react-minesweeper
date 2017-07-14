@@ -21,7 +21,8 @@ class App extends Component {
                 style={{
                     display: 'flex',
                     flexFlow: 'row wrap',
-                    width: boardWidth
+                    width: boardWidth,
+                    border: gameOver ? '1px solid red' : 'none'
                 }}
             >
                 {board.map(id =>

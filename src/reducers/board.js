@@ -20,9 +20,6 @@ const cell = (
             }
             break
         case 'CELL_OPEN':
-            if (state.isFlagged) {
-                return state
-            }
             return {
                 ...state,
                 isOpen: true
@@ -31,6 +28,45 @@ const cell = (
         default:
             return state
     }
+}
+const getID = (coord, fromId) => {
+    const arr = fromId.split('x')
+    let row = +arr[0]
+    let col = +arr[1]
+
+    switch (coord) {
+        case 'nw':
+            row--
+            col--
+            break
+        case 'n':
+            col--
+            break
+        case 'ne':
+            row++
+            col++
+            break
+        case 'w':
+            col--
+            break
+        case 'e':
+            col++
+            break
+        case 'sw':
+            row++
+            col--
+            break
+        case 's':
+            row++
+            break
+        case 'se':
+            row++
+            col++
+            break
+        default:
+    }
+
+    return `${row}x${col}`
 }
 
 const cells = (state = {}, action) => {
@@ -42,10 +78,36 @@ const cells = (state = {}, action) => {
             }
             break
         case 'CELL_OPEN':
-            return {
-                ...state,
-                [action.id]: cell(state[action.id], action)
-            }
+            const { id } = action
+            let newState = { ...state, [id]: cell(state[id], action) }
+
+            if (state[id].value > 0) return newState
+
+            // recursively open other cells
+
+            // surrounding cell ids
+            const surIds = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']
+
+            surIds.forEach(sid => {
+                const sCell = state[getID(sid, id)]
+                if (sCell !== undefined) {
+                    const { isFlagged, isOpen } = sCell
+                    if (!isFlagged && !isOpen) {
+                        newState = cells(
+                            {
+                                ...newState,
+                                [sCell.id]: cell(sCell, action)
+                            },
+                            {
+                                ...action,
+                                id: sCell.id
+                            } // change action id
+                        )
+                    }
+                }
+            })
+
+            return newState
         default:
             return state
     }

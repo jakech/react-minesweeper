@@ -13,7 +13,7 @@ export default ({
     const flag = '\uD83D\uDEA9'
     const bomb = '\uD83D\uDCA3'
     return (
-        <div
+        <button
             style={{
                 flex: '1 1 auto',
                 width: 20,
@@ -22,11 +22,12 @@ export default ({
                 background: isOpen ? 'lightgray' : 'darkgray',
                 textAlign: 'center',
                 border: '1px white solid',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                padding: 0,
+                margin: 0
             }}
+            disabled={isOpen}
             onClick={() => {
-                if (isOpen) return
-
                 onClick(id)
                 if (hasMine) {
                     onHitMine()
@@ -39,6 +40,6 @@ export default ({
         >
             {isFlagged && flag}
             {isOpen && (hasMine ? bomb : !!value && value)}
-        </div>
+        </button>
     )
 }

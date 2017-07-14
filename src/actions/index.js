@@ -5,7 +5,7 @@ const toggleCellFlag = id => {
     }
 }
 
-const openCell = id => {
+export const openCell = id => {
     return {
         type: 'CELL_OPEN',
         id
@@ -24,9 +24,11 @@ export const tryOpenCell = id => (dispatch, getState) => {
     dispatch(openCell(id))
 }
 
-export const endGame = () => {
+export const endGame = () => (dispatch, getState) => {
+    const { game } = getState()
+    if (game.gameOver) return
     console.log('game over')
-    return {
+    dispatch({
         type: 'GAME_OVER'
-    }
+    })
 }
