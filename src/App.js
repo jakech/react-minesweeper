@@ -5,7 +5,7 @@ import Cell from './Cell'
 
 class App extends Component {
     render() {
-        const { board, cells, toggleFlag, open } = this.props
+        const { boardWidth, board, cells, toggleFlag, open } = this.props
         return (
             <div
                 className="App"
@@ -13,11 +13,16 @@ class App extends Component {
                     display: 'flex',
                     flexFlow: 'row wrap',
                     // width: ROWS * 20
-                    width: 480
+                    width: boardWidth
                 }}
             >
                 {board.map(id =>
-                    <Cell key={id} onRightClick={toggleFlag} onClick={open} {...cells[id]} />
+                    <Cell
+                        key={id}
+                        onRightClick={toggleFlag}
+                        onClick={open}
+                        {...cells[id]}
+                    />
                 )}
             </div>
         )
@@ -25,7 +30,9 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-    return { ...state }
+    const { allIds, byId } = state.board;
+    console.log(state.options)
+    return { board: allIds, cells: byId, boardWidth: state.options.rows * 20 }
 }
 
 const mapDispatchToProps = dispatch => {

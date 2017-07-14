@@ -1,7 +1,15 @@
-import React from 'react';
+import React from 'react'
 
-export default ({ id, hasMine, isFlagged, value, isOpen, onClick, onRightClick }) => {
-    const flag = '\uD83D\uDEA9';
+export default ({
+    id,
+    hasMine,
+    isFlagged,
+    value,
+    isOpen,
+    onClick,
+    onRightClick
+}) => {
+    const flag = '\uD83D\uDEA9'
     const bomb = '\uD83D\uDCA3'
     return (
         <div
@@ -17,12 +25,12 @@ export default ({ id, hasMine, isFlagged, value, isOpen, onClick, onRightClick }
             }}
             onClick={() => onClick(id)}
             onContextMenu={e => {
-                e.preventDefault();
-                onRightClick(id);
+                e.preventDefault()
+                onRightClick(id)
             }}
         >
             {isFlagged && flag}
             {isOpen && (hasMine ? bomb : !!value && value)}
         </div>
-    );
-};
+    )
+}
