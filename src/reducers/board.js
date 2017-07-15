@@ -26,7 +26,6 @@ const cell = (
             }
             break
         case 'GAME_OVER':
-            console.log('GG')
             if (action.id !== state.id) {
                 return state
             }

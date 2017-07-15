@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Tile from './components/Tile'
+import Tile from '../Tile'
 
 export default class Cell extends Component {
     constructor(props) {
