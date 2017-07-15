@@ -24,11 +24,12 @@ export const openCell = id => {
 //     dispatch(openCell(id))
 // }
 
-export const endGame = () => (dispatch, getState) => {
+export const endGame = id => (dispatch, getState) => {
     const { game } = getState()
     if (game.gameOver) return
     console.log('game over')
     dispatch({
-        type: 'GAME_OVER'
+        type: 'GAME_OVER',
+        id
     })
 }

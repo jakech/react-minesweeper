@@ -11,7 +11,7 @@ export default class Cell extends Component {
         const { cell, onClick, onHitMine } = this.props
         if (cell.isFlagged) return
         if (cell.hasMine) {
-            onHitMine()
+            onHitMine(cell.id)
         } else {
             onClick(cell.id)
         }

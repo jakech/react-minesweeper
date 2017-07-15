@@ -1,5 +1,8 @@
 import React from 'react'
 
+const flag = '\uD83D\uDEA9'
+const bomb = '\uD83D\uDCA3'
+
 export default ({
     isOpen,
     isFlagged,
@@ -10,8 +13,6 @@ export default ({
     onClick,
     onRightClick
 }) => {
-    const flag = '\uD83D\uDEA9'
-    const bomb = '\uD83D\uDCA3'
     return (
         <button
             style={{

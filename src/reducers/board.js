@@ -25,6 +25,16 @@ const cell = (
                 isOpen: true
             }
             break
+        case 'GAME_OVER':
+            console.log('GG')
+            if (action.id !== state.id) {
+                return state
+            }
+            return {
+                ...state,
+                highlight: true
+            }
+            break
         default:
             return state
     }
@@ -108,6 +118,12 @@ const cells = (state = {}, action) => {
             })
 
             return newState
+        case 'GAME_OVER':
+            return {
+                ...state,
+                [action.id]: cell(state[action.id], action)
+            }
+            break
         default:
             return state
     }
