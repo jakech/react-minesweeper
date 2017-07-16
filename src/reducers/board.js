@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { createBoard } from '../gameCreator'
 
 const cell = (
     state = {
@@ -78,7 +79,14 @@ const getID = (coord, fromId) => {
     return `${row}x${col}`
 }
 
-const cells = (state = {}, action) => {
+const boardOptions = {
+    mines: 99,
+    rows: 24,
+    cols: 24
+}
+const theBorad = createBoard(boardOptions)
+
+const cells = (state = theBorad.byId, action) => {
     switch (action.type) {
         case 'CELL_TOGGLE_FLAG':
             return {
@@ -123,12 +131,14 @@ const cells = (state = {}, action) => {
                 [action.id]: cell(state[action.id], action)
             }
             break
+        case 'NEW_GAME':
+            return createBoard(boardOptions).byId
         default:
             return state
     }
 }
 
 export default combineReducers({
-    allIds: (state = []) => state,
+    allIds: (state = theBorad.allIds) => state,
     byId: cells
 })

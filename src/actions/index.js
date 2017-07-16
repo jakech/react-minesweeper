@@ -12,17 +12,12 @@ export const openCell = id => {
     }
 }
 
-// export const tryToggleCellFlag = id => (dispatch, getState) => {
-//     const { game } = getState()
-//     if (game.gameOver) return
-//     dispatch(toggleCellFlag(id))
-// }
-
-// export const tryOpenCell = id => (dispatch, getState) => {
-//     const { game } = getState()
-//     if (game.gameOver) return
-//     dispatch(openCell(id))
-// }
+export const newGame = () => {
+    console.log('new game')
+    return {
+        type: 'NEW_GAME'
+    }
+}
 
 export const endGame = id => (dispatch, getState) => {
     const { game } = getState()

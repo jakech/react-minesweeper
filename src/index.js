@@ -9,21 +9,9 @@ import './index.css'
 import App from './App'
 import AppReducers from './reducers'
 
-import { loadGame } from './gameCreator'
-
 import registerServiceWorker from './registerServiceWorker'
 
-const boardOptions = {
-    mines: 99,
-    rows: 24,
-    cols: 24
-}
-
-const store = createStore(
-    AppReducers,
-    loadGame(boardOptions),
-    applyMiddleware(thunk, createLogger())
-)
+const store = createStore(AppReducers, applyMiddleware(thunk, createLogger()))
 
 ReactDOM.render(
     <Provider store={store}>

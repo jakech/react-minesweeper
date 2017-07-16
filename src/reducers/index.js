@@ -3,9 +3,9 @@ import board from './board'
 
 const game = (
     state = {
-        mines: 0,
-        rows: 0,
-        cols: 0,
+        mines: 99,
+        rows: 24,
+        cols: 24,
         gameOver: false
     },
     action
@@ -17,6 +17,13 @@ const game = (
                 gameOver: true
             }
             break
+        case 'NEW_GAME':
+            return {
+                mines: 99,
+                rows: 24,
+                cols: 24,
+                gameOver: false
+            }
         default:
             return state
     }

@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
+import Game from './components/Game'
 import Board from './components/Board'
 
-class App extends Component {
-    render() {
-        return <Board />
-    }
-}
+const App = () =>
+    <Game>
+        <Board />
+    </Game>
 
 export default App
