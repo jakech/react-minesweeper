@@ -4,8 +4,8 @@ import board from './board'
 const game = (
     state = {
         mines: 99,
-        rows: 24,
-        cols: 24,
+        rows: 16,
+        cols: 30,
         gameOver: false
     },
     action
@@ -17,10 +17,11 @@ const game = (
                 gameOver: true
             }
         case 'NEW_GAME':
+            const { mines, rows, cols } = action
             return {
-                mines: 99,
-                rows: 24,
-                cols: 24,
+                mines,
+                rows,
+                cols,
                 gameOver: false
             }
         default:

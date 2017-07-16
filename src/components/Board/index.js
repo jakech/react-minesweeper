@@ -51,7 +51,7 @@ const mapStateToProps = state => {
     return {
         board: allIds,
         cells: byId,
-        boardWidth: state.game.rows * 20, // 20 is the cell width
+        boardWidth: state.game.cols * 20, // 20 is the cell width
         gameOver: state.game.gameOver
     }
 }

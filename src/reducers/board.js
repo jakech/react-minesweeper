@@ -78,8 +78,8 @@ const getID = (coord, fromId) => {
 
 const boardOptions = {
     mines: 99,
-    rows: 24,
-    cols: 24
+    rows: 16,
+    cols: 30
 }
 const theBorad = createBoard(boardOptions)
 
@@ -127,13 +127,22 @@ const cells = (state = theBorad.byId, action) => {
                 [action.id]: cell(state[action.id], action)
             }
         case 'NEW_GAME':
-            return createBoard(boardOptions).byId
+            const { mines, rows, cols } = action
+            return createBoard({ mines, rows, cols }).byId
         default:
             return state
     }
 }
 
 export default combineReducers({
-    allIds: (state = theBorad.allIds) => state,
+    allIds: (state = theBorad.allIds, action) => {
+        switch (action.type) {
+            case 'NEW_GAME':
+                const { mines, rows, cols } = action
+                return createBoard({ mines, rows, cols }).allIds
+            default:
+                return state
+        }
+    },
     byId: cells
 })

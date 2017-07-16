@@ -12,10 +12,11 @@ export const openCell = id => {
     }
 }
 
-export const newGame = () => {
-    console.log('new game')
+export const newGame = options => {
+    console.log('new game', options)
     return {
-        type: 'NEW_GAME'
+        type: 'NEW_GAME',
+        ...options
     }
 }
 
