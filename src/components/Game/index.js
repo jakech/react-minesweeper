@@ -2,33 +2,30 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { newGame } from '../../actions'
 
-const levels = [
-    {
-        name: 'beginner',
+const levels = {
+    beginner: {
         rows: 9,
         cols: 9,
         mines: 10
     },
-    {
-        name: 'intermediate',
+    intermediate: {
         rows: 16,
         cols: 16,
         mines: 40
     },
-    {
-        name: 'expert',
+    expert: {
         rows: 16,
         cols: 30,
         mines: 99
     }
-]
-
-const getLevel = name => {
-    return levels.filter(l => l.name === name)[0]
 }
 
-const getLevelByMineNum = mines => {
-    return levels.filter(l => l.mines === mines)[0]
+const getLevel = name => {
+    return levels[name]
+}
+
+const getLevelNameByMineNum = mines => {
+    return Object.keys(levels).filter(l => levels[l].mines === mines)[0]
 }
 
 class Game extends Component {
@@ -61,12 +58,12 @@ class Game extends Component {
             >
                 <header>
                     <select
-                        value={getLevelByMineNum(mines).name}
+                        value={getLevelNameByMineNum(mines)}
                         onChange={this.handleChange}
                     >
-                        {levels.map(l =>
-                            <option key={l.name} value={l.name}>
-                                {l.name}
+                        {Object.keys(levels).map(key =>
+                            <option key={key} value={key}>
+                                {key}
                             </option>
                         )}
                     </select>
