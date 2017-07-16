@@ -19,13 +19,11 @@ const cell = (
                 ...state,
                 isFlagged: !state.isFlagged
             }
-            break
         case 'CELL_OPEN':
             return {
                 ...state,
                 isOpen: true
             }
-            break
         case 'GAME_OVER':
             if (action.id !== state.id) {
                 return state
@@ -34,7 +32,6 @@ const cell = (
                 ...state,
                 highlight: true
             }
-            break
         default:
             return state
     }
@@ -93,7 +90,6 @@ const cells = (state = theBorad.byId, action) => {
                 ...state,
                 [action.id]: cell(state[action.id], action)
             }
-            break
         case 'CELL_OPEN':
             const { id } = action
             let newState = { ...state, [id]: cell(state[id], action) }
@@ -130,7 +126,6 @@ const cells = (state = theBorad.byId, action) => {
                 ...state,
                 [action.id]: cell(state[action.id], action)
             }
-            break
         case 'NEW_GAME':
             return createBoard(boardOptions).byId
         default:

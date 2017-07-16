@@ -16,7 +16,6 @@ const game = (
                 ...state,
                 gameOver: true
             }
-            break
         case 'NEW_GAME':
             return {
                 mines: 99,
