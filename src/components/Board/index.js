@@ -1,21 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { toggleCellFlag, openCell, endGame } from '../../actions'
 
 import Cell from '../Cell'
-import Tile from '../Tile'
 
 class Board extends Component {
     render() {
-        const {
-            gameOver,
-            boardWidth,
-            board,
-            cells,
-            toggleFlag,
-            open,
-            endGame
-        } = this.props
+        const { boardWidth, board } = this.props
         return (
             <div
                 style={{
@@ -24,40 +14,18 @@ class Board extends Component {
                     width: boardWidth
                 }}
             >
-                {board.map(
-                    id =>
-                        gameOver
-                            ? <Tile
-                                  key={id}
-                                  {...cells[id]}
-                                  disabled={true}
-                                  isOpen={cells[id].isOpen || cells[id].hasMine}
-                              />
-                            : <Cell
-                                  key={id}
-                                  onRightClick={toggleFlag}
-                                  onClick={open}
-                                  onHitMine={endGame}
-                                  cell={cells[id]}
-                              />
-                )}
+                {board.map(id => <Cell key={id} id={id} />)}
             </div>
         )
     }
 }
 
 const mapStateToProps = state => {
-    const { allIds, byId } = state.board
+    const { board, game } = state
     return {
-        board: allIds,
-        cells: byId,
-        boardWidth: state.game.cols * 20, // 20 is the cell width
-        gameOver: state.game.gameOver
+        board: board.allIds,
+        boardWidth: game.cols * 20 // 20 is the cell width
     }
 }
 
-export default connect(mapStateToProps, {
-    toggleFlag: toggleCellFlag,
-    open: openCell,
-    endGame
-})(Board)
+export default connect(mapStateToProps)(Board)

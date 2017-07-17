@@ -1,35 +1,49 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import Tile from '../Tile'
 
-export default class Cell extends Component {
-    constructor(props) {
-        super(props)
-        this.handleClick = this.handleClick.bind(this)
-        this.handleRightClick = this.handleRightClick.bind(this)
+import { toggleCellFlag, openCell, endGame } from '../../actions'
+
+const cellMapState = (state, ownProps) => {
+    return {
+        tile: state.board.byId[ownProps.id],
+        isGameOver: state.game.gameOver
     }
-    handleClick() {
-        const { cell, onClick, onHitMine } = this.props
-        if (cell.isFlagged) return
-        if (cell.hasMine) {
-            onHitMine(cell.id)
+}
+
+const cellMapDispatch = (dispatch, ownProps) => ({
+    getClickFunc(tile) {
+        if (tile.isFlagged) return
+        if (tile.hasMine) {
+            return () => {
+                dispatch(endGame(ownProps.id))
+            }
         } else {
-            onClick(cell.id)
+            return () => {
+                dispatch(openCell(ownProps.id))
+            }
         }
-    }
+    },
     handleRightClick(e) {
-        const { cell, onRightClick } = this.props
         e.preventDefault()
-        onRightClick(cell.id)
+        dispatch(toggleCellFlag(ownProps.id))
     }
+})
+
+class Cell extends Component {
     render() {
-        const { cell } = this.props
+        const { tile, isGameOver, getClickFunc, handleRightClick } = this.props
+
         return (
             <Tile
-                {...cell}
-                disabled={cell.isOpen}
-                onClick={this.handleClick}
-                onRightClick={this.handleRightClick}
+                {...tile}
+                isOpen={(isGameOver && tile.hasMine) || tile.isOpen}
+                disabled={isGameOver || tile.isOpen}
+                onClick={!isGameOver && getClickFunc(tile)}
+                onRightClick={!isGameOver && handleRightClick}
             />
         )
     }
 }
+
+export default connect(cellMapState, cellMapDispatch)(Cell)
