@@ -41,16 +41,22 @@ const getID = (coord, fromId) => {
     let row = +arr[0]
     let col = +arr[1]
 
+    //  nw | n | ne
+    // -------------
+    //  w  | c | e
+    // -------------
+    //  sw | s | se
+
     switch (coord) {
         case 'nw':
             row--
             col--
             break
         case 'n':
-            col--
+            row--
             break
         case 'ne':
-            row++
+            row--
             col++
             break
         case 'w':
@@ -92,33 +98,42 @@ const cells = (state = theBorad.byId, action) => {
             }
         case 'CELL_OPEN':
             const { id } = action
-            let newState = { ...state, [id]: cell(state[id], action) }
-
-            if (state[id].value > 0) return newState
-
-            // recursively open other cells
-
+            const newState = { ...state }
             // surrounding cell ids
             const surIds = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']
+            const stack = []
 
-            surIds.forEach(sid => {
-                const sCell = state[getID(sid, id)]
-                if (sCell !== undefined) {
-                    const { isFlagged, isOpen } = sCell
-                    if (!isFlagged && !isOpen) {
-                        newState = cells(
-                            {
-                                ...newState,
-                                [sCell.id]: cell(sCell, action)
-                            },
-                            {
-                                ...action,
-                                id: sCell.id
-                            } // change action id
-                        )
-                    }
+            stack.push(newState[action.id])
+
+            while (stack.length > 0) {
+                let curCell = stack.pop()
+
+                let tiles = surIds
+                    .map(sid => {
+                        return newState[getID(sid, curCell.id)]
+                    })
+                    .filter(t => t !== undefined)
+
+                let mineNum = 0
+                for (let i = 0; i < tiles.length; i++) {
+                    if (tiles[i].hasMine) mineNum += 1
                 }
-            })
+
+                if (mineNum > 0) {
+                    curCell = { ...curCell, value: mineNum }
+                } else {
+                    tiles.forEach(tile => {
+                        if (!tile.isOpen && !tile.isFlagged) {
+                            stack.push(tile)
+                        }
+                    })
+                }
+
+                newState[curCell.id] = cell(curCell, {
+                    ...action,
+                    id: curCell.id
+                })
+            }
 
             return newState
         case 'GAME_OVER':

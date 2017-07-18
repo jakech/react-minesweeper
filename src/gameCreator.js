@@ -53,46 +53,6 @@ function createCells(cellIDs, mines, rows, cols) {
         if (!cell.hasMine) {
             cell.hasMine = true
             mineRemain--
-
-            // set value
-            //  nw | n | ne
-            // -------------
-            //  w  | c | e
-            // -------------
-            //  sw | s | se
-
-            if (row - 1 >= 0 && col - 1 >= 0) {
-                // nw
-                cells[row - 1 + SEP + (col - 1)].value++
-            }
-            if (row - 1 >= 0) {
-                // north
-                cells[row - 1 + SEP + col].value++
-            }
-            if (row - 1 >= 0 && col + 1 < cols) {
-                // ne
-                cells[row - 1 + SEP + (col + 1)].value++
-            }
-            if (col - 1 > 0) {
-                // w
-                cells[row + SEP + (col - 1)].value++
-            }
-            if (col + 1 < cols) {
-                // east
-                cells[row + SEP + (col + 1)].value++
-            }
-            if (row + 1 < rows && col - 1 > 0) {
-                // sw
-                cells[row + 1 + SEP + (col - 1)].value++
-            }
-            if (row + 1 < rows) {
-                // s
-                cells[row + 1 + SEP + col].value++
-            }
-            if (row + 1 < rows && col + 1 < cols) {
-                // se
-                cells[row + 1 + SEP + (col + 1)].value++
-            }
         }
     }
 
