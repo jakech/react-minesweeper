@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { createBoard } from '../gameCreator'
+import { createBoard } from 'gameCreator'
 
 const cell = (
     state = {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { newGame } from '../../actions'
+import { newGame } from 'actions'
 
 const levels = {
     beginner: {

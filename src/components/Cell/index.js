@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Tile from '../Tile'
+import Tile from 'components/Tile'
 
 import { toggleCellFlag, openCell, endGame } from '../../actions'
 

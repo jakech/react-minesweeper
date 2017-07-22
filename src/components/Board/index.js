@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import Cell from '../Cell'
+import Cell from 'components/Cell'
 
 class Board extends Component {
     render() {

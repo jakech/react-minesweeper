@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import board from './board'
+import board from 'reducers/board'
 
 const game = (
     state = {
