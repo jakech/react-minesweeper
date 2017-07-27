@@ -47,34 +47,23 @@ const getID = (coord, fromId) => {
     // -------------
     //  sw | s | se
 
+    // prettier-ignore
     switch (coord) {
-        case 'nw':
-            row--
-            col--
+        case 'nw':  row--; col--
             break
-        case 'n':
-            row--
+        case 'n':   row--
             break
-        case 'ne':
-            row--
-            col++
+        case 'ne':  row--; col++
             break
-        case 'w':
-            col--
+        case 'w':   col--
             break
-        case 'e':
-            col++
+        case 'e':   col++
             break
-        case 'sw':
-            row++
-            col--
+        case 'sw':  row++; col--
             break
-        case 's':
-            row++
+        case 's':   row++
             break
-        case 'se':
-            row++
-            col++
+        case 'se':  row++; col++
             break
         default:
     }
@@ -84,12 +73,8 @@ const getID = (coord, fromId) => {
 
 export default function createBoardReducer(gameSettings) {
     const { mines, rows, cols } = gameSettings
-    const theBorad = generateBoard(rows, cols)
 
-    const cells = (
-        state = createCells(theBorad, mines, rows, cols),
-        action
-    ) => {
+    const cells = (state = createCells(mines, rows, cols, cell), action) => {
         switch (action.type) {
             case 'CELL_TOGGLE_FLAG':
                 return {
@@ -142,9 +127,7 @@ export default function createBoardReducer(gameSettings) {
                 }
             case 'NEW_GAME':
                 const { mines, rows, cols } = action
-                const theBorad = generateBoard(rows, cols)
-
-                return createCells(theBorad, mines, rows, cols)
+                return createCells(mines, rows, cols, cell)
             default:
                 return state
         }

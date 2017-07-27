@@ -1,13 +1,5 @@
 const SEP = 'x'
 
-export const createBoard = options => {
-    const newBoard = generateBoard(options.rows, options.cols)
-    return {
-        allIds: newBoard,
-        byId: createCells(newBoard, options.mines, options.rows, options.cols)
-    }
-}
-
 function getRandomInt(min, max) {
     min = Math.ceil(min)
     max = Math.floor(max)
@@ -26,15 +18,10 @@ export function generateBoard(rows, cols) {
     return board
 }
 
-export function createCells(cellIDs, mines, rows, cols) {
-    const cells = cellIDs.reduce((obj, id) => {
-        obj[id] = {
-            id,
-            hasMine: false,
-            isOpen: false,
-            isFlagged: false,
-            value: 0
-        }
+export function createCells(mines, rows, cols, cellReducer) {
+    const cells = generateBoard(rows, cols).reduce((obj, id) => {
+        const cell = cellReducer(undefined, { type: undefined }) // get the default state
+        obj[id] = { ...cell, id }
         return obj
     }, {})
 
