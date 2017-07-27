@@ -8,11 +8,6 @@ export const createBoard = options => {
     }
 }
 
-export const loadGame = options => ({
-    game: options,
-    board: createBoard(options)
-})
-
 function getRandomInt(min, max) {
     min = Math.ceil(min)
     max = Math.floor(max)
@@ -20,7 +15,7 @@ function getRandomInt(min, max) {
     //The maximum is exclusive and the minimum is inclusive
 }
 
-function generateBoard(rows, cols) {
+export function generateBoard(rows, cols) {
     let board = []
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
@@ -31,7 +26,7 @@ function generateBoard(rows, cols) {
     return board
 }
 
-function createCells(cellIDs, mines, rows, cols) {
+export function createCells(cellIDs, mines, rows, cols) {
     const cells = cellIDs.reduce((obj, id) => {
         obj[id] = {
             id,

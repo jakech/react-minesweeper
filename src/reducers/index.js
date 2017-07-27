@@ -1,15 +1,13 @@
 import { combineReducers } from 'redux'
-import board from 'reducers/board'
+import createBoardReducer from 'reducers/board'
 
-const game = (
-    state = {
-        mines: 99,
-        rows: 16,
-        cols: 30,
-        gameOver: false
-    },
-    action
-) => {
+const gameSettings = {
+    mines: 99,
+    rows: 16,
+    cols: 30
+}
+
+const game = (state = { ...gameSettings, gameOver: false }, action) => {
     switch (action.type) {
         case 'GAME_OVER':
             return {
@@ -31,5 +29,5 @@ const game = (
 
 export default combineReducers({
     game,
-    board
+    board: createBoardReducer(gameSettings)
 })

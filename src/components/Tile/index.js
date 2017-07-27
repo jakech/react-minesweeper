@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const ICON_FLAG = '\uD83D\uDEA9'
@@ -23,7 +24,7 @@ const Button = styled.button`
     }
 `
 
-export default ({
+const Tile = ({
     isOpen,
     isFlagged,
     hasMine,
@@ -46,3 +47,15 @@ export default ({
         </Button>
     )
 }
+
+Tile.PropTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    isFlagged: PropTypes.bool.isRequired,
+    hasMine: PropTypes.bool.isRequired,
+    value: PropTypes.number.isRequired,
+    highlight: PropTypes.bool,
+    onClick: PropTypes.func,
+    onRightClick: PropTypes.func
+}
+
+export default Tile

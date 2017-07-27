@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { createBoard } from 'gameCreator'
+import { createCells, generateBoard } from 'gameCreator'
 
 const cell = (
     state = {
@@ -82,82 +82,84 @@ const getID = (coord, fromId) => {
     return `${row}x${col}`
 }
 
-const boardOptions = {
-    mines: 99,
-    rows: 16,
-    cols: 30
-}
-const theBorad = createBoard(boardOptions)
+export default function createBoardReducer(gameSettings) {
+    const { mines, rows, cols } = gameSettings
+    const theBorad = generateBoard(rows, cols)
 
-const cells = (state = theBorad.byId, action) => {
-    switch (action.type) {
-        case 'CELL_TOGGLE_FLAG':
-            return {
-                ...state,
-                [action.id]: cell(state[action.id], action)
-            }
-        case 'CELL_OPEN':
-            const { id } = action
-            const newState = { ...state }
-            // surrounding cell ids
-            const surIds = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']
-            const stack = []
-
-            stack.push(newState[action.id])
-
-            while (stack.length > 0) {
-                let curCell = stack.pop()
-
-                let tiles = surIds
-                    .map(sid => {
-                        return newState[getID(sid, curCell.id)]
-                    })
-                    .filter(t => t !== undefined)
-
-                let mineNum = 0
-                for (let i = 0; i < tiles.length; i++) {
-                    if (tiles[i].hasMine) mineNum += 1
-                }
-
-                if (mineNum > 0) {
-                    curCell = { ...curCell, value: mineNum }
-                } else {
-                    tiles.forEach(tile => {
-                        if (!tile.isOpen && !tile.isFlagged) {
-                            stack.push(tile)
-                        }
-                    })
-                }
-
-                newState[curCell.id] = cell(curCell, {
-                    ...action,
-                    id: curCell.id
-                })
-            }
-
-            return newState
-        case 'GAME_OVER':
-            return {
-                ...state,
-                [action.id]: cell(state[action.id], action)
-            }
-        case 'NEW_GAME':
-            const { mines, rows, cols } = action
-            return createBoard({ mines, rows, cols }).byId
-        default:
-            return state
-    }
-}
-
-export default combineReducers({
-    allIds: (state = theBorad.allIds, action) => {
+    const cells = (
+        state = createCells(theBorad, mines, rows, cols),
+        action
+    ) => {
         switch (action.type) {
+            case 'CELL_TOGGLE_FLAG':
+                return {
+                    ...state,
+                    [action.id]: cell(state[action.id], action)
+                }
+            case 'CELL_OPEN':
+                const newState = { ...state }
+                // surrounding cell ids
+                const surIds = ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se']
+                const stack = []
+
+                stack.push(newState[action.id])
+
+                while (stack.length > 0) {
+                    let curCell = stack.pop()
+
+                    let tiles = surIds
+                        .map(sid => {
+                            return newState[getID(sid, curCell.id)]
+                        })
+                        .filter(t => t !== undefined)
+
+                    let mineNum = 0
+                    for (let i = 0; i < tiles.length; i++) {
+                        if (tiles[i].hasMine) mineNum += 1
+                    }
+
+                    if (mineNum > 0) {
+                        curCell = { ...curCell, value: mineNum }
+                    } else {
+                        tiles.forEach(tile => {
+                            if (!tile.isOpen && !tile.isFlagged) {
+                                stack.push(tile)
+                            }
+                        })
+                    }
+
+                    newState[curCell.id] = cell(curCell, {
+                        ...action,
+                        id: curCell.id
+                    })
+                }
+
+                return newState
+            case 'GAME_OVER':
+                return {
+                    ...state,
+                    [action.id]: cell(state[action.id], action)
+                }
             case 'NEW_GAME':
                 const { mines, rows, cols } = action
-                return createBoard({ mines, rows, cols }).allIds
+                const theBorad = generateBoard(rows, cols)
+
+                return createCells(theBorad, mines, rows, cols)
             default:
                 return state
         }
-    },
-    byId: cells
-})
+    }
+
+    return combineReducers({
+        allIds: (state = generateBoard(rows, cols), action) => {
+            switch (action.type) {
+                case 'NEW_GAME':
+                    const { rows, cols } = action
+                    return generateBoard(rows, cols)
+                default:
+                    return state
+            }
+        },
+        byId: cells
+    })
+}
