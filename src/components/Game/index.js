@@ -46,8 +46,7 @@ class Game extends Component {
         this.props.newGame({ ...this.state })
     }
     render() {
-        const { newGame } = this.props
-        const { rows, cols, mines } = this.state
+        const { mines } = this.state
         return (
             <div
                 style={{

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Tile from 'components/Tile'
 
-import { toggleCellFlag, openCell, endGame } from '../../actions'
+import { toggleCellFlag, openCell, touchNeighbours, endGame } from 'actions'
 
 const cellMapState = (state, ownProps) => {
     return {
@@ -13,7 +13,7 @@ const cellMapState = (state, ownProps) => {
 
 const cellMapDispatch = (dispatch, ownProps) => ({
     getClickFunc(tile) {
-        if (tile.isFlagged) return
+        if (tile.isFlagged || tile.isOpen) return
         if (tile.hasMine) {
             return () => {
                 dispatch(endGame(ownProps.id))
@@ -24,23 +24,41 @@ const cellMapDispatch = (dispatch, ownProps) => ({
             }
         }
     },
-    handleRightClick(e) {
+    dispatchToggleCellFlag(e) {
         e.preventDefault()
         dispatch(toggleCellFlag(ownProps.id))
+    },
+    dispatchTouchNeighbours(e) {
+        e.preventDefault()
+        dispatch(touchNeighbours(ownProps.id))
     }
 })
 
 class Cell extends Component {
     render() {
-        const { tile, isGameOver, getClickFunc, handleRightClick } = this.props
+        const {
+            tile,
+            isGameOver,
+            getClickFunc,
+            dispatchToggleCellFlag,
+            dispatchTouchNeighbours
+        } = this.props
 
         return (
             <Tile
                 {...tile}
-                isOpen={(isGameOver && tile.hasMine) || tile.isOpen}
-                disabled={isGameOver || tile.isOpen}
+                isOpen={
+                    (isGameOver && (!tile.isFlagged && tile.hasMine)) ||
+                    tile.isOpen
+                }
+                disabled={isGameOver}
                 onClick={!isGameOver && getClickFunc(tile)}
-                onRightClick={!isGameOver && handleRightClick}
+                onRightClick={
+                    !isGameOver &&
+                    (tile.isOpen
+                        ? dispatchTouchNeighbours
+                        : dispatchToggleCellFlag)
+                }
             />
         )
     }
